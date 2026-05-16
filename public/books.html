@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+	<title>Books Page</title>
+	<link rel="stylesheet" href="styles.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Rouge+Script&display=swap" rel="stylesheet">
+
+	<meta name="description" content="A modern Library Management System built with Express and PostgreSQL that allows 
+	users to browse, add, edit, and delete books, manage availability status, and navigate a paginated catalog through 
+	a clean and user-friendly interface.">
+	
+	<script src="books.js"></script>
+
+	<style>
+
+		body {
+			margin: 0;
+			background-color: #ECF0F1;
+		}		
+
+		#logo-text {
+			font-family: 'Montserrat', serif;
+			font-weight: 700;
+			font-size: 1.0em;
+			text-decoration: none;
+			color: #ECF0F1;
+			padding-left: 20px;
+			padding-right: 20px;
+			margin-right: auto;
+		}
+
+		.book {
+			color: #0B2A44; 
+		}
+
+		.master {
+			padding-left: 1px;
+			color: #3498DB;
+		}
+
+		/* Header */
+		#header-content {
+			text-align: center;
+			padding: 40px 20px 20px 20px;
+			background-color: white;
+		}
+
+		#header-title {
+			font-size: 2em;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		#header-text {
+			max-width: 700px;
+			margin: auto;
+			color: #555;
+		}
+
+		/* Add Book Button */
+		#controls {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 40px;
+			background-color: white;
+			border-bottom: 1px solid #ddd;
+		}
+
+		#add-btn {
+			background-color: #3498DB;
+			color: white;
+			border: none;
+			padding: 10px 18px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 600;
+		}
+
+		#add-btn:hover {
+			background-color: #2980b9;
+		}
+
+		/* Table */
+		#container {
+			padding: 30px 40px;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			background-color: white;
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		th, td {
+			padding: 15px;
+			text-align: left;
+		}
+
+		th {
+			background-color: #2C3E50;
+			color: white;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f9f9f9;
+		}
+
+		tr:hover {
+			background-color: #eef6fb;
+		}
+
+		/* Status */
+		.status {
+			padding: 5px 10px;
+			border-radius: 12px;
+			font-size: 0.8em;
+			font-weight: 600;
+		}
+
+		.available {
+			background-color: #d4edda;
+			color: #2e7d32;
+		}
+
+		.borrowed {
+			background-color: #f8d7da;
+			color: #c0392b;
+		}
+
+		/* Edit and Delete Buttons */
+		.action-btn {
+			margin-right: 10px;
+			cursor: pointer;
+			font-weight: 500;
+		}
+
+		.edit {
+			color: #3498DB;
+		}
+
+		.delete {
+			color: #e74c3c;
+		}
+
+		/* Pagination */
+		#pagination {
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		#pagination span {
+			margin: 0 8px;
+			cursor: pointer;
+		}
+
+		.current-page {
+			font-weight: 700;
+			color: #3498DB;
+		}
+
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<div id="navbar">
+		<p id="logo-text">
+			<span class="book">Book</span><span class="master">Master</span>
+		</p>
+		<a href="index.html">Home</a>
+		<a href="books.html">Books</a>
+		<a href="borrow.html">Borrow</a>
+	</div>
+
+	<!-- Header -->
+	<div id="header-content">
+		<div id="header-title">Books Catalog</div>
+		<p id="header-text">
+			Browse, search, and manage all books in the library. Add new titles, update details, or remove entries 
+			with ease.
+		</p>
+	</div>
+
+	<!-- Add book button -->
+	<div id="controls">
+		<button id="add-btn" onclick="openAddModal()">+ Add Book</button>
+	</div>
+
+	<!-- Table -->
+	<div id="container">
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th> 
+					<th>Title</th>
+					<th>Author</th>
+					<th>Genre</th>
+					<th>Year</th>
+					<th>Status</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+
+			<tbody id="book-table-body">
+
+			</tbody>
+		</table>
+
+		<!-- Edit Book Form -->
+		<div id="edit-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+			
+			<div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:10px;">
+				<h3 id="modal-title">Edit Book</h3>
+
+				<input id="edit-title" placeholder="Title" /><br><br>
+				<input id="edit-author" placeholder="Author" /><br><br>
+				<input id="edit-genre" placeholder="Genre" /><br><br>
+				<input id="edit-year" placeholder="Year" /><br><br>
+
+				<select id="edit-status">
+					<option value="Available">Available</option>
+					<option value="Borrowed">Borrowed</option>
+				</select><br><br>
+
+				<button id="modal-save-btn" onclick="submitEdit()">Save</button>
+				<button onclick="closeModal()">Cancel</button>
+			</div>
+
+		</div>
+
+		<!-- Pagination -->
+		<div id="pagination">
+			<span>&lt;&lt;</span>
+			<span class="current-page">1</span>
+			<span>2</span>
+			<span>3</span>
+			<span>&gt;&gt;</span>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div id="footer">
+		University of Southern California &copy; 2026
+	</div>
+
+</body>
+
+</html>

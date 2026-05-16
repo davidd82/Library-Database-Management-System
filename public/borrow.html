@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+	<title>Borrow Page</title>
+	<link rel="stylesheet" href="styles.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Rouge+Script&display=swap" rel="stylesheet">
+
+	<meta name="description" content="A full-featured Library Management System built with Express and PostgreSQL that 
+	allows users to manage book inventories, create user profiles, track borrowing records, and maintain relational 
+	data through an intuitive and interactive interface.">
+	
+	<script src="borrow.js"></script>
+
+	<style>
+
+		body {
+			margin: 0;
+			background-color: #ECF0F1;
+		}		
+
+		#logo-text {
+			font-family: 'Montserrat', serif;
+			font-weight: 700;
+			font-size: 1.0em;
+			text-decoration: none;
+			color: #ECF0F1;
+			padding-left: 20px;
+			padding-right: 20px;
+			margin-right: auto;
+		}
+
+		.book {
+			color: #0B2A44; 
+		}
+
+		.master {
+			padding-left: 1px;
+			color: #3498DB;
+		}
+
+		/* Header */
+		#header-content {
+			text-align: center;
+			padding: 40px 20px 20px 20px;
+			background-color: white;
+		}
+
+		#header-title {
+			font-size: 2em;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		#header-text {
+			max-width: 700px;
+			margin: auto;
+			color: #555;
+		}
+
+		/* Add Book Button */
+		#controls {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 40px;
+			background-color: white;
+			border-bottom: 1px solid #ddd;
+		}
+
+		#add-btn {
+			background-color: #3498DB;
+			color: white;
+			border: none;
+			padding: 10px 18px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 600;
+		}
+
+		#add-btn:hover {
+			background-color: #2980b9;
+		}
+
+		/* Table */
+		#container {
+			padding: 30px 40px;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			background-color: white;
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		th, td {
+			padding: 15px;
+			text-align: left;
+		}
+
+		th {
+			background-color: #2C3E50;
+			color: white;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f9f9f9;
+		}
+
+		tr:hover {
+			background-color: #eef6fb;
+		}
+
+		/* Status */
+		.status {
+			padding: 5px 10px;
+			border-radius: 12px;
+			font-size: 0.8em;
+			font-weight: 600;
+		}
+
+		.available {
+			background-color: #d4edda;
+			color: #2e7d32;
+		}
+
+		.borrowed {
+			background-color: #f8d7da;
+			color: #c0392b;
+		}
+
+		/* Edit and Delete Buttons */
+		.action-btn {
+			margin-right: 10px;
+			cursor: pointer;
+			font-weight: 500;
+		}
+
+		.edit {
+			color: #3498DB;
+		}
+
+		.delete {
+			color: #e74c3c;
+		}
+
+		
+
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<div id="navbar">
+		<p id="logo-text">
+			<span class="book">Book</span><span class="master">Master</span>
+		</p>
+		<a href="index.html">Home</a>
+		<a href="books.html">Books</a>
+		<a href="borrow.html">Borrow</a>
+	</div>
+
+	<!-- Header -->
+	<div id="header-content">
+		<div id="header-title">Borrow Records</div>
+		<p id="header-text">
+			Manage library users and track borrowing activity. Create users, assign books, and monitor active and 
+			returned records through a structured relational system.
+		</p>
+	</div>
+
+	<!-- Add book button -->
+	<div id="controls">
+		<button id="add-btn" onclick="openAddUserModal()">+ Add User</button>
+		<button id="add-btn" onclick="openAddRecordModal()">+ Add Record</button>
+	</div>
+
+	<!-- Table -->
+
+	<h3 style="padding-left:40px;">Users</h3>
+
+	<div id="container">
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Actions</th> 
+				</tr>
+			</thead>
+
+			<tbody id="users-table-body">
+
+			</tbody>
+		</table>
+	</div>
+
+	<h3 style="padding-left:40px;">Borrow Records</h3>
+
+	<div id="container">
+		<table>
+			<thead>
+				<tr>
+					<th>User</th>
+					<th>Book</th>
+					<th>Borrow Date</th>
+					<th>Return Date</th>
+					<th>Actions</th> 
+				</tr>
+			</thead>
+
+			<tbody id="records-table-body">
+
+			</tbody>
+		</table>
+	</div>
+
+
+		<!-- Add user modal -->
+		<div id="user-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+			<div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:10px;">
+				<h3>Add User</h3>
+
+				<input id="user-name" placeholder="Name" /><br><br>
+				<input id="user-email" placeholder="Email" /><br><br>
+
+				<button onclick="submitUser()">Save</button>
+				<button onclick="closeUserModal()">Cancel</button>
+			</div>
+		</div>
+
+		<!-- Add record modal -->
+		<div id="record-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+			<div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:10px;">
+				<h3>Add Borrow Record</h3>
+
+				<select id="record-user-id"></select><br><br>
+				<select id="record-book-id"></select><br><br>
+
+				<input id="record-borrow-date" placeholder="MM/DD/YYYY"/>
+				<input id="record-return-date" placeholder="MM/DD/YYYY"/>
+
+				<button onclick="submitRecord()">Save</button>
+				<button onclick="closeRecordModal()">Cancel</button>
+			</div>
+		</div>
+
+		<div id="user-edit-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+			<div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:10px;">
+				<h3>Edit User</h3>
+
+				<input id="edit-user-name" placeholder="Name" /><br><br>
+				<input id="edit-user-email" placeholder="Email" /><br><br>
+
+				<button onclick="submitUserEdit()">Save</button>
+				<button onclick="closeUserEditModal()">Cancel</button>
+			</div>
+		</div>
+
+		<div id="record-edit-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+
+			<div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:10px;">
+				<h3>Edit Borrow Record</h3>
+
+				<input id="edit-record-borrow" placeholder="Borrow Date (MM/DD/YYYY)" /><br><br>
+				<input id="edit-record-return" placeholder="Return Date (MM/DD/YYYY)" /><br><br>
+
+				<button onclick="submitRecordEdit()">Save</button>
+				<button onclick="closeRecordEditModal()">Cancel</button>
+			</div>
+
+		</div>
+
+
+	<!-- Footer -->
+	<div id="footer">
+		University of Southern California &copy; 2026
+	</div>
+
+</body>
+
+</html>

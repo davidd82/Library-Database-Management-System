@@ -141,7 +141,7 @@ Example:
 
 ## Database Diagram
 
-![Database Diagram](images/database.png)
+![Database Diagram](public/img/database.png)
 
 ---
 

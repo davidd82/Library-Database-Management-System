@@ -145,7 +145,4 @@ Example:
 
 ---
 
-## Author
 
-Your Name  
-Computer Engineering & Computer Science Student at USC

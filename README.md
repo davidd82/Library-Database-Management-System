@@ -140,7 +140,7 @@ Add screenshots of your project here.
 Example:
 
 ```md
-![Homepage Screenshot](images/homepage.png)
+![Homepage Screenshot](public/img/database.png)
 ```
 
 ---

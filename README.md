@@ -1,3 +1,5 @@
+Website Link: [Library Management System Website](https://tac303-final-project-xvqs.onrender.com/)
+
 # Library Database Management System
 
 A full-stack Library Management System built with **Express.js** and **PostgreSQL** that allows users to manage books, users, and borrowing activity through a structured relational database.
@@ -75,6 +77,12 @@ Connects users and books:
 
 ---
 
+## Database Diagram
+
+![Database Diagram](public/img/database.png)
+
+---
+
 ## Features
 
 ### Book Management
@@ -133,16 +141,5 @@ https://www.librarything.com/
 
 ---
 
-## Screenshots
-
-Add screenshots of your project here.
-
-Example:
-
-## Database Diagram
-
-![Database Diagram](public/img/database.png)
-
----
 
 

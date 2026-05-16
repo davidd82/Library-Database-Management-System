@@ -139,9 +139,9 @@ Add screenshots of your project here.
 
 Example:
 
-```md
-![Homepage Screenshot](public/img/database.png)
-```
+## Database Diagram
+
+![Database Diagram](images/database.png)
 
 ---
 
